@@ -1,0 +1,32 @@
+name: Publish Docker container
+
+on:
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - master
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+  # Run tests for any PRs.
+  pull_request:
+
+jobs:
+  # Push image to GitHub Packages.
+  # See also https://docs.docker.com/docker-hub/builds/
+  push:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      
+      - uses: actions/checkout@v2
+
+      - name: Log into registry
+        #note by default GITHUB_TOKEN is already set in your repo to push to the registry by default for github
+        run: echo "${{ secrets.GITHUB_TOKEN }}" |docker login docker.pkg.github.com --username ${{github.actor}} --password-stdin
+
+      - name: Build, Tag, Push
+        run: make docker-push

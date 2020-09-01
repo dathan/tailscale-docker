@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-forwarder
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-forwarder
+  template:
+    metadata:
+      labels:
+        app: nginx-forwarder
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /etc/nginx # mount nginx-conf volumn to /etc/nginx
+          readOnly: true
+          name: nginx-forwarder-conf
+      - name: tailscale
+        image: docker.pkg.github.com/dathan/tailscale-docker/tailscale-docker
+        env:
+        {{- range .Values.envVars }}
+        - name: "{{ .Name }}"
+          value: "{{ .Value }}"
+        {{- end}}
+        readinessProbe:
+          exec:
+            command: 
+            - {{ .Values.readiness.command |quote }}
+          initialDelaySeconds: {{ .Values.readiness.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readiness.periodSeconds }}
+          failureThreshold: {{ .Values.readiness.failureThreshold }}
+          successThreshold: {{ .Values.readiness.successThreshold }}
+          timeoutSeconds: {{ .Values.readiness.timeoutSeconds }}
+        livenessProbe:
+          exec:
+            command: 
+            - {{ .Values.liveness.command |quote }}
+          initialDelaySeconds: {{ .Values.liveness.initialDelaySeconds }}
+          periodSeconds: {{ .Values.liveness.periodSeconds }}
+          failureThreshold: {{ .Values.liveness.failureThreshold }}
+          successThreshold: {{ .Values.liveness.successThreshold }}
+          timeoutSeconds: {{ .Values.liveness.timeoutSeconds }}
+        securityContext:
+          capabilities:
+            add:
+              - NET_ADMIN
+      volumes:
+      - name: nginx-forwarder-conf
+        configMap:
+          name: nginx-forwarder-conf # place ConfigMap `nginx-conf` on /etc/nginx
+          items:
+            - key: nginx.conf
+              path: nginx.conf

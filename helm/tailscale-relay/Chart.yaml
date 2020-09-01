@@ -1,0 +1,15 @@
+apiVersion: v1
+name: tailscale-relay
+version: 0.0.1
+description: Launch tailscale as a container to relay traffic internally within the private mesh network
+keywords:
+  - tailscale
+  - docker
+  - make
+  - helm
+home: https://github.com/dathan/tailscale-docker
+maintainers:
+  - name: dathan
+engine: gotpl
+appVersion: v0.0.1
+tillerVersion: ">=2.8.0"

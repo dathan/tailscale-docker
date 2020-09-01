@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-forwarder-conf
+data:
+  nginx.conf: |
+    events {
+       worker_connections  512;
+    }
+    stream {
+        server {
+            listen 80;
+            proxy_pass {{.Values.appName}}-service:{{.Values.service.port |default 80}};
+   
+        }
+    }

@@ -1,0 +1,23 @@
+{{- if .Values.service.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.appName }}-service
+  labels:
+    app: {{ .Values.appName }}
+  annotations:
+  {{- if .Values.service.annotations }}
+{{ toYaml .Values.service.annotations | indent 4 }}
+  {{- end }}
+spec:
+  type: {{.Values.service.type}}
+  ports:
+    {{- range .Values.service.ports }}
+    - port: {{ .port }}
+      targetPort: {{ .containerPort | default .port }}
+      protocol: {{ .protocol }}
+      name: {{ .name }}
+    {{- end }}
+  selector:
+    app: {{ .Values.appName }}
+{{- end }}

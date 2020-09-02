@@ -27,3 +27,7 @@ make helmrun # assumes you set up the secrets for the registry
 * verify the container is up
 
 
+## Special Thanks to 
+@hamishforbes  - he had a thread that gave me a roadmap to get this done
+
+

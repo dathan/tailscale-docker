@@ -8,7 +8,7 @@ all: docker-build docker-tag docker-push
 
 .PHONY: helmrun
 helmrun: docker-build docker-tag
-	helm delete tailscale-relay --purge
+	#helm delete tailscale-relay --purge
 	helm install --name 'tailscale-relay' --debug ./helm/tailscale-relay/
 
 # Build docker containers

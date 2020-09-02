@@ -1,7 +1,7 @@
 appName: tailscale-relay
 releaseVersion: v0.0.1
 envVars:
-  - Name: ADVERTISE-ROUTES
+  - Name: ADVERTISE_ROUTES
     Value: "10.1.4.201/32"
 
 replicaCount: 1

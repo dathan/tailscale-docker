@@ -7,12 +7,13 @@ Run tailscale as a relay into kubernetes backnet and or services. Since TCP dire
 * helm - the helm chart to install tailscale into kubernetes with the purpose of advertisement of routes to backnet resources
 
 
+## Verified
+
+Able to reach databases behind the container
+
+
 ## TODO
 
-* create helm chart
-* create helmfile install
 * verify the container is up
-* verify can route to internal cluster
-* verify in a production test cluster
 
 

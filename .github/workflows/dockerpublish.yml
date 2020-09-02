@@ -26,7 +26,7 @@ jobs:
 
       - name: Log into registry
         #note by default GITHUB_TOKEN is already set in your repo to push to the registry by default for github
-        run: echo "${{ secrets.GITHUB_TOKEN }}" |docker login docker.pkg.github.com --username ${{github.actor}} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" |docker login ghcr.io --username ${{github.actor}} --password-stdin
 
       - name: Build, Tag, Push
         run: make docker-push

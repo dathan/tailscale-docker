@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-forwarder
+  name: tailscale-relay
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx-forwarder
+      app: tailscale-relay
   template:
     metadata:
       labels:
-        app: nginx-forwarder
+        app: tailscale-relay
     spec:
       containers:
       - name: nginx
@@ -22,34 +22,37 @@ spec:
           readOnly: true
           name: nginx-forwarder-conf
       - name: tailscale
-        image: docker.pkg.github.com/dathan/tailscale-docker/tailscale-docker
+        image: ghcr.io/dathan/tailscale-docker
         env:
         {{- range .Values.envVars }}
         - name: "{{ .Name }}"
           value: "{{ .Value }}"
         {{- end}}
-        readinessProbe:
-          exec:
-            command: 
-            - {{ .Values.readiness.command |quote }}
-          initialDelaySeconds: {{ .Values.readiness.initialDelaySeconds }}
-          periodSeconds: {{ .Values.readiness.periodSeconds }}
-          failureThreshold: {{ .Values.readiness.failureThreshold }}
-          successThreshold: {{ .Values.readiness.successThreshold }}
-          timeoutSeconds: {{ .Values.readiness.timeoutSeconds }}
-        livenessProbe:
-          exec:
-            command: 
-            - {{ .Values.liveness.command |quote }}
-          initialDelaySeconds: {{ .Values.liveness.initialDelaySeconds }}
-          periodSeconds: {{ .Values.liveness.periodSeconds }}
-          failureThreshold: {{ .Values.liveness.failureThreshold }}
-          successThreshold: {{ .Values.liveness.successThreshold }}
-          timeoutSeconds: {{ .Values.liveness.timeoutSeconds }}
+#
+#       readinessProbe:
+#         exec:
+#           command: 
+#           - {{ .Values.readiness.command |quote }}
+#         initialDelaySeconds: {{ .Values.readiness.initialDelaySeconds }}
+#         periodSeconds: {{ .Values.readiness.periodSeconds }}
+#         failureThreshold: {{ .Values.readiness.failureThreshold }}
+#         successThreshold: {{ .Values.readiness.successThreshold }}
+#         timeoutSeconds: {{ .Values.readiness.timeoutSeconds }}
+#       livenessProbe:
+#         exec:
+#           command: 
+#           - {{ .Values.liveness.command |quote }}
+#         initialDelaySeconds: {{ .Values.liveness.initialDelaySeconds }}
+#         periodSeconds: {{ .Values.liveness.periodSeconds }}
+#         failureThreshold: {{ .Values.liveness.failureThreshold }}
+#         successThreshold: {{ .Values.liveness.successThreshold }}
+#         timeoutSeconds: {{ .Values.liveness.timeoutSeconds }}
         securityContext:
           capabilities:
             add:
               - NET_ADMIN
+      imagePullSecrets:
+      - name: regcred
       volumes:
       - name: nginx-forwarder-conf
         configMap:

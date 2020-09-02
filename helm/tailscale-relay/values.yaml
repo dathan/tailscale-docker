@@ -2,7 +2,7 @@ appName: tailscale-relay
 releaseVersion: v0.0.1
 envVars:
   - Name: ADVERTISE-ROUTES
-    Value: "10.0.0.0/8"
+    Value: "10.1.4.201/32"
 
 replicaCount: 1
 
@@ -14,14 +14,14 @@ liveness:
   failureThreshold: 3
   successThreshold: 1
   timeoutSeconds: 1
-  command: "ps aux |grep tailscale |grep -v grep"
+  command: "test 1"
 readiness:
   initialDelaySeconds: 60
   periodSeconds: 10
   failureThreshold: 3
   successThreshold: 1
   timeoutSeconds: 1
-  command: "ps aux |grep tailscale |grep -v grep" 
+  command: "test 1" 
 service:
   enabled: true
   type: ClusterIP

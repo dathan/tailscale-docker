@@ -12,6 +12,16 @@ Run tailscale as a relay into kubernetes backnet and or services. Since TCP dire
 Able to reach databases behind the container
 
 
+## How to run
+
+```
+modify ./helm/values.tmpl and set the values correctly
+
+make helmrun # assumes you set up the secrets for the registry
+```
+
+
+
 ## TODO
 
 * verify the container is up

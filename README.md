@@ -20,7 +20,7 @@ modify ./helm/values.tmpl and set the values correctly
 make helmrun # assumes you set up the secrets for the registry
 ```
 
-#REQUIREMENTS
+## REQUIREMENTS
 
 [https://www.kernel.org/doc/Documentation/networking/tuntap.txt](/dev/net/tun)
 is required by VPN software to intercept packets. The container needs an
